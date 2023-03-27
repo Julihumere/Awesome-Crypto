@@ -1,11 +1,21 @@
 
-import React, { FC } from 'react'
-import { FlatList, Image, ScrollView, StyleSheet, Text, View } from 'react-native'
+import React, { FC, useState } from 'react'
+import { FlatList, Image, TouchableOpacity, StyleSheet, Text, View } from 'react-native'
 import { CryptoItem } from '../Components/CryptoItem';
+import { Empty } from '../Components/Empty';
 import CryptoData from "../Utils/CryptoData.json"
 
+interface CryptoType {
+  id: string;
+  name: string;
+  symbol: string;
+  img: string;
+  price: string;
+  price_last_24_hours: string;
+}
 
 export const HomeScreen: FC = () => {
+  const [showCrypto, setShowCrypto] = useState(false)
   return (
     <View style={style.Home__container}>
       <View style={style.Title__container}>
@@ -13,15 +23,9 @@ export const HomeScreen: FC = () => {
         <Image source={{uri: "https://res.cloudinary.com/dann9ji59/image/upload/v1678890590/Foto_perfil_i1wjsc.jpg"}} style={style.img} />
       </View> 
       <View style={{flex: 1, marginTop: 20}}>
-        <FlatList
-          data={CryptoData}
-          renderItem={({item}) =><CryptoItem MarketCrypto={item}/>}
-          ListFooterComponent={
-            <View style={style.Button__container}>
-              <Text style={style.Button__add}>+ Add a Cryptocurrency</Text>
-            </View>  
-          }
-        />
+       {showCrypto === false
+        ?<Empty setShowCrypto={setShowCrypto} />
+        :<CryptoItem setShowCrypto={setShowCrypto}/>}
       </View>
     </View>
   );
